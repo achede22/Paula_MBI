@@ -10,13 +10,6 @@ variable "PRODUCTIVE_FLAG" {
 variable "COMMON_TAGS" {
     description = "The common tags to be applied to all resources."
     type        = map(string)
-  default = {
-    Environment   = "LAB"
-    Creator       = "Hernán De León"
-    SolutionName  = "shared"
-    Temporary     = "false"
-    Scope         = "networking"
-  }
 }
 
 
@@ -123,3 +116,12 @@ variable "SUBNET_PREFIX" {
 #         type        = string
 #         }
 
+# ArgoCD
+variable "ARGOCD" {
+    type        = map(string)
+    default = {
+        server_address = "argocd.shared.svc.cluster.local"
+        username       = "admin"
+        password       = "vicicleta"
+    }
+}

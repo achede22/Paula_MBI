@@ -1,3 +1,12 @@
+COMMON_TAGS = {
+    Environment   = "LAB"
+    Creator       = "Hernán De León"
+    SolutionName  = "shared"
+    Temporary     = "false"
+    Scope         = "networking"
+    }
+
+
 # AKS cluster
     LOCATION            = "eu-we"
     PRODUCTIVE_FLAG     = "westeurope"
@@ -26,6 +35,14 @@
     APP_GATEWAY_SUBNET_PREFIX       = ["172.16.3.0/24"]
 
 
-# Peerings: remote_virtual_network_id 
-#    VNET_HUB_ID         ="/subscriptions/b0cc4cbd-8a30-443c-b8fd-12e629e318fe/resourceGroups/rg-eu-we-hub-sbx/providers/Microsoft.Network/virtualNetworks/vnet-eu-we-hub-sbx"
-#    VNET_APPGATEWAY_ID  ="/subscriptions/ced02317-875f-4553-a004-78707492f256/resourceGroups/rg-eu-we-appgateway-nopro/providers/Microsoft.Network/virtualNetworks/vnet-eu-we-appgateway-nopro"
+# ArgoCD
+    ARGOCD = {
+        namespace = "argocd"
+        name      = "argocd"
+        chart     = "argo-cd"
+        version   = "3.15.1"
+        repo_url  = "https://argoproj.github.io/argo-helm"
+        repo_name = "argo"
+        user  = "admin"
+        password  = "admin"
+    }
