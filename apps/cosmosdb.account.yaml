@@ -1,0 +1,20 @@
+# Description: CosmosDB Account Deployment
+# Documentation: https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/cosmosdb_account
+
+apiVersion: azurerm.kubeform.com/v1alpha1
+kind: CosmosdbAccount
+metadata:
+  name: db-cosmos
+spec:
+  name: db-cosmos-sample-prashix
+  resourceGroupName: dev
+  location: East US
+  offerType: Standard
+  kind: GlobalDocumentDB
+  consistencyPolicy:
+  - consistencyLevel: Session
+  geoLocation:
+  - location: East US
+    failoverPriority: 0
+  providerRef:
+    name: azure

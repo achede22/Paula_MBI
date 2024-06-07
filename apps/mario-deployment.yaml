@@ -1,0 +1,73 @@
+# Description: This file contains the deployment, service, and ingress resources for the Mario application.
+# The deployment resource creates a single replica of the Mario application.
+# The service resource exposes the Mario application to the internet.
+# The ingress resource routes traffic from the mario.local domain to the Mario application.
+# The namespace resource creates a new namespace called mario-ns.
+# The Mario application is a simple web service that displays a Super Mario image.
+# The image is hosted on Docker Hub and is publicly available.
+
+# Create a Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mario-deploy
+  namespace: mario-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mario
+  template:
+    metadata:
+      labels:
+        app: mario
+    spec:
+      containers:
+        - name: mario-service
+          image: pengbai/docker-supermario-service
+          ports:
+        - containerPort: 8080
+---
+# Create a Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: mario-svc
+  namespace: mario-ns
+spec:
+  selector:
+    app: mario
+  ports:
+    - protocol: TCP
+      port: 8600
+      targetPort: 8600
+  type: LoadBalancer      
+---
+# Create an Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mario-ingress
+  namespace: mario-ns
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: mario.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mario-svc
+                port:
+                  number: 8080
+---
+
+# Create a namespace
+apiVersion: v1
+kind: namespace
+metadata:
+  name: mario-ns
+---

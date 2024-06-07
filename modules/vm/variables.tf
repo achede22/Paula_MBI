@@ -1,0 +1,2 @@
+variable "COMMON_TAGS" {   
+}
