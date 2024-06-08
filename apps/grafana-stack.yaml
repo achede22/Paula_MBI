@@ -1,0 +1,20 @@
+# Application for Grafana Stack, LGTM Distributed, 
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: grafana-stack
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/grafana/helm-charts/tree/main/charts/lgtm-distributed
+    targetRevision: main
+    path: charts/lgtm-distribuited
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: grafana-stack
+  syncPolicy:
+    automated:
+      prune: true 
+      selfHeal: true
+    syncOptions:

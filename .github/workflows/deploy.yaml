@@ -1,0 +1,71 @@
+name: Terraform and ArgoCD
+
+on:
+  push:
+    branches:
+      - main
+
+      
+env:
+  TF_VAR_file: 'environment-variables/sandbox.tfvars'
+
+jobs:
+  terraform:
+    name: 'Terraform'
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+
+    - name: Terraform Init
+      run: terraform init
+
+    - name: Terraform Plan
+      run: terraform plan -var-file=${{ env.TF_VAR_file }}
+
+    - name: Terraform Apply
+      run: terraform apply -auto-approve -var-file=${{ env.TF_VAR_file }}
+
+  argocd:
+    name: 'ArgoCD'
+    needs: terraform
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Install ArgoCD CLI
+      run: |
+        curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+        chmod +x /usr/local/bin/argocd
+
+    - name: Set environment  
+      run: |
+          echo "ARGOCD_USERNAME=${{ steps.terraform.outputs.argocd_username }}" >> $GITHUB_ENV
+          echo "ARGOCD_PASSWORD=${{ steps.terraform.outputs.argocd_password }}" >> $GITHUB_ENV
+          echo "ARGOCD_NAMESPACE=${{ steps.terraform.outputs.argocd_namespace }}" >> $GITHUB_ENV
+          echo "ARGOCD_SERVER_ADDR=${{ steps.terraform.outputs.argocd_server_addr }}" >> $GITHUB_ENV
+          
+    - name: ArgoCD Login
+      run: argocd login $ARGOCD_SERVER_ADDR --username $ARGOCD_USERNAME --password $ARGOCD_PASSWORD
+
+    - name: Create ArgoCD Users
+      run: |
+        # Add commands to create ArgoCD users here
+
+    - name: Deploy ArgoCD Apps
+      run: |
+        # Add commands to deploy ArgoCD apps here
+
+    - name: Sync ArgoCD
+      run: |
+        # Add commands to sync ArgoCD here
+
+    - name: Deploy Token
+      run: |
+        # Add commands to deploy token here
