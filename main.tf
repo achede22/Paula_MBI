@@ -31,6 +31,12 @@ module cosmodb {
   // Pass any required variables here
 }
 
+module argocd {
+  source              = "./modules/argocd"
+  ARGOCD              = var.ARGOCD
+  // Pass any required variables here
+}
+
 module vm {
   source              = "./modules/vm"
   COMMON_TAGS         = var.COMMON_TAGS
